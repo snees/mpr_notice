@@ -38,12 +38,9 @@ $conn = mysqli_connect("localhost","hmp","mpr1234!","hmp");
                         $_SESSION['userpwd'] = $_POST['login_pw'];
                         $check = isset($_POST['auto_login']) ? "checked" : "unchecked";
                         if($check == "checked"){
-                            mysqli_query($conn, "UPDATE member SET autologin=1 WHERE userid='{$_POST['login_id']}'");
                             setcookie('id', $_POST['login_id'], time()+86400*30);
                             setcookie("login_time",time(), time()+86400*30);
                             setcookie("token",md5($_['login_id'].['login_pw']), time()+86400*30);
-                        }else{
-                            mysqli_query($conn, "UPDATE member SET autologin=0 WHERE userid='{$_POST['login_id']}'");
                         }
                         echo "<script>location.href='./notice.php'</script>";
                         
