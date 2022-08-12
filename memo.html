@@ -1,0 +1,245 @@
+<!-- <form action="notice.php" method="POST">
+        <table>
+            <thead>
+                <tr>
+                    <td colspan="4">
+                    <select name="etc">
+                        <option value="전체" selected="selected">전체</option>
+                        <option value="번호">번호</option>
+                        <option value="제목">제목</option>
+                        <option value="작성일">작성일</option>
+                    </select>
+                    <input type="text" size="20">
+                    <button id="searchBtn">search</button>
+                    </td>
+                </tr>
+            </thead>
+            <tr class="header"><th class="num">번호</th><th class="title">제목</th><th class="date">작성일</th><th class="view">조회수</th></tr>
+        </table>
+    </form> -->
+    <?php
+    include 'session.php';
+    $conn = mysqli_connect("localhost","hmp","mpr1234!","hmp");
+    
+    //---- $_GET
+    //---- $_POST
+    //---- $_REQUEST
+    if ( trim($_GET['mode'])=='logout' ) {
+        $_SESSION['userid'] = ''; // isset사용할거면 null로 지정
+        $_SESSION['userpwd'] = '';
+        
+        // session_destroy();
+    
+        echo '<script>alert("로그아웃 되었습니다.");</script>';
+        echo "<script>location.href='./index.php'</script>";
+    }
+    //탈퇴
+    if ( trim($_GET['mode'])=='leave' ) {
+      mysqli_query($conn,"DELETE FROM member WHERE userid='{$_SESSION['userid']}'");
+      mysqli_query($conn,"DELETE FROM notice WHERE author='{$_SESSION['userid']}'");
+      $auto_increment_reset= mysqli_query($conn,"ALTER table notice idx=1");
+      mysqli_query($conn,"UPDATE notice SET author='unknown' WHERE author='{$_SESSION['userid']}'");
+      echo '<script>alert("탈퇴되었습니다.");</script>';
+      $_SESSION['userid'] = ''; // isset사용할거면 null로 지정
+      $_SESSION['userpwd'] = '';
+      echo "<script>location.href='./index.php'</script>";
+    }
+    ?>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="notice.css?after">
+        <title>Document</title>
+    </head>
+    <body>
+      <form method="POST">
+        <div class="userinfo">
+          <div class="logout_btn"><a href="./notice.php?mode=logout">로그아웃</a></div>
+          <div class="leave_btn"><a href="./notice.php?mode=leave">탈퇴하기</a></div>
+        </div>
+      </form>
+      <div class="notice"><h1>게시판</h1></div>
+        <form method="POST" action="./notice.php?mode=search" class="form">
+          <div class="div_search_btn">
+              <select name="search">
+                <option value="title" selected="selected">제목</option>
+                <option value="author">작성자</option>
+              </select>
+              <input type="text" class="input_search" name="input_search" placeholder="검색어 입력" autocomplete='off'>
+              <input type="submit" class="search_btn" name="search_btn" value="검색"/>
+          </div>
+        </form>
+        <div class="write_btn"><a href="./write.php"><button>글쓰기</button></a></div>
+        <div class="back_btn hidden"><a href="./notice.php"><button>목록으로</button></a></div>
+        <!-- <div class="logout_btn"><a href="./logout.php"><button>로그아웃</button></a></div> -->
+        <div class="table">
+            <table>
+            <thead>
+              <tr>
+                  <th>번호</th>
+                    <th class="title">제목</th>
+                    <th>작성자</th>
+                    <th>작성일</th>
+                    <th>조회수</th>
+                </tr>
+            </thead>
+            <?php
+            if(trim($_GET['mode'] == 'search')){
+              if(!empty($_POST['search'])) {
+                $selected = $_POST['search'];
+                echo '<script>console.log("'.$selected.'");</script>';
+                if(isset($_GET['page'])){
+                  $page = $_GET['page'];
+                    }else{
+                      $page = 1;
+                    }
+                    $sql = mysqli_query($conn,"SELECT * FROM notice WHERE $selected = '{$_POST['input_search']}'");
+                    $row_num = mysqli_num_rows($sql); //게시판 총 레코드 수
+                    if($row_num == 0){
+                      echo '<script>alert("검색결과가 없습니다.");</script>';
+                      echo "<script>location.href='./notice.php'</script>";
+                    }else{
+                      $list = 10; //한 페이지에 보여줄 개수
+                      $block_ct = 5; //블록당 보여줄 페이지 개수
+                      
+                      $block_num = ceil($page/$block_ct); // 현재 페이지 블록 구하기
+                      $block_start = (($block_num - 1) * $block_ct) + 1; // 블록의 시작번호
+                      $block_end = $block_start + $block_ct - 1; //블록 마지막 번호
+    
+                      $total_page = ceil($row_num / $list); // 페이징한 페이지 수 구하기
+                      if($block_end > $total_page) $block_end = $total_page; //만약 블록의 마지박 번호가 페이지수보다 많다면 마지박번호는 페이지 수
+                      $total_block = ceil($total_page/$block_ct); //블럭 총 개수
+                      $start_num = ($page-1) * $list; //시작번호 (page-1)에서 $list를 곱한다.
+    
+                      $first_num = $row_num-$list*($page-1);
+            
+                      $sql2 = "SELECT * FROM notice WHERE $selected = '{$_POST['input_search']}' ORDER BY idx DESC LIMIT $start_num, $list";  
+                      $res2 = mysqli_query($conn,$sql2);
+                      while($notice = $res2->fetch_array()){
+                        $title=$notice["title"]; 
+                            if(strlen($title)>30)
+                            { 
+                              $title=str_replace($notice["title"],mb_substr($notice["title"],0,30,"utf-8")."...",$notice["title"]);
+                            }
+                    ?>
+                <tbody>
+                    <tr>
+                    <td><?php echo $first_num; ?></td>
+                    <td><a href="./read.php?idx=<?php echo $notice['idx']?>"><?php echo $title;?></a></td>
+                    <td><?php echo $notice['author']?></td>
+                    <td><?php if(empty($notice['updateDate'])){
+                            echo $notice['createdate'];
+                        }else{
+                            echo $notice['updateDate'];
+                        }?></td>
+                    <td><?php echo $notice['view']; ?></td>
+                    </tr>
+              </tbody>
+                <?php $first_num--; } ?>
+                </table>
+              </div>
+                   <!---페이징 넘버 --->
+              <div id="page_num">
+                <ul>
+                  <?php
+                  
+                    if($block_num >= $total_block){ //만약 현재 블록이 블록 총개수보다 크거나 같다면 빈 값
+                    }
+                    for($i=$block_start; $i<=$block_end; $i++){ 
+                        //for문 반복문을 사용하여, 초기값을 블록의 시작번호를 조건으로 블록시작번호가 마지박블록보다 작거나 같을 때까지 $i를 반복시킨다
+                        if($page == $i){ //만약 page가 $i와 같다면 
+                          echo "<li class='now_page'>$i</li>"; //현재 페이지에 해당하는 번호에 굵은 빨간색을 적용한다
+                        }else{
+                          echo "<li><a href='?page=$i'>$i</a></li>"; //아니라면 $i
+                        }
+                      }
+                      if($block_num < $total_block){
+                        $next = $page + 1; //next변수에 page + 1을 해준다.
+                        echo "<li><a href='?page=$next'>다음</a></li>"; //다음글자에 next변수를 링크한다. 현재 4페이지에 있다면 +1하여 5페이지로 이동하게 된다.
+                        //만약 현재 블록이 블록 총개수보다 크거나 같다면 빈 값
+                      }
+                    }
+                  ?>
+                </ul>
+              </div>
+              <?php
+              } else {
+                  echo '<script>alert("Please select the value.");</script>';
+              }
+          }else{
+            if(isset($_GET['page'])){
+              $page = $_GET['page'];
+                }else{
+                  $page = 1;
+                }
+                $sql = mysqli_query($conn,"SELECT * FROM notice");
+                $row_num = mysqli_num_rows($sql); //게시판 총 레코드 수
+                $list = 10; //한 페이지에 보여줄 개수
+                $block_ct = 5; //블록당 보여줄 페이지 개수
+                
+                $block_num = ceil($page/$block_ct); // 현재 페이지 블록 구하기
+                $block_start = (($block_num - 1) * $block_ct) + 1; // 블록의 시작번호
+                $block_end = $block_start + $block_ct - 1; //블록 마지막 번호
+    
+                $total_page = ceil($row_num / $list); // 페이징한 페이지 수 구하기
+                if($block_end > $total_page) $block_end = $total_page; //만약 블록의 마지박 번호가 페이지수보다 많다면 마지박번호는 페이지 수
+                $total_block = ceil($total_page/$block_ct); //블럭 총 개수
+                $start_num = ($page-1) * $list; //시작번호 (page-1)에서 $list를 곱한다.
+    
+                $first_num = $row_num-$list*($page-1);
+    
+                $sql2 = "SELECT * FROM notice ORDER BY idx DESC LIMIT $start_num, $list";  
+                $res2 = mysqli_query($conn,$sql2);
+                while($notice = $res2->fetch_array()){
+                    $title=$notice["title"]; 
+                        if(strlen($title)>30)
+                        { 
+                          $title=str_replace($notice["title"],mb_substr($notice["title"],0,30,"utf-8")."...",$notice["title"]);
+                        }
+                ?>
+            <tbody>
+                <tr>
+                <td><?php echo $first_num; ?></td>
+                <td><a href="./read.php?idx=<?php echo $notice['idx']?>"><?php echo $title;?></a></td>
+                <td><?php echo $notice['author']?></td>
+                <td><?php if(empty($notice['updateDate'])){
+                        echo $notice['createdate'];
+                    }else{
+                        echo $notice['updateDate'];
+                    }?></td>
+                <td><?php echo $notice['view']; ?></td>
+                </tr>
+          </tbody>
+            <?php $first_num--;} ?>
+            </table>
+      </div>
+             <!---페이징 넘버 --->
+        <div id="page_num">
+          <ul>
+            <?php
+            if($block_num >= $total_block){
+              $prev = $page - 1;
+              echo "<li><a href='?page=$prev'>이전</a></li>"; //만약 현재 블록이 블록 총개수보다 크거나 같다면 빈 값
+            }
+            for($i=$block_start; $i<=$block_end; $i++){ 
+                //for문 반복문을 사용하여, 초기값을 블록의 시작번호를 조건으로 블록시작번호가 마지박블록보다 작거나 같을 때까지 $i를 반복시킨다
+                if($page == $i){ //만약 page가 $i와 같다면 
+                  echo "<li class='now_page'>$i</li>"; //현재 페이지에 해당하는 번호에 굵은 빨간색을 적용한다
+                }else{
+                  echo "<li><a href='?page=$i'>$i</a></li>"; //아니라면 $i
+                }
+              }
+              if($block_num < $total_block){
+                $next = $page + 1; //next변수에 page + 1을 해준다.
+                echo "<li><a href='?page=$next'>다음</a></li>"; //다음글자에 next변수를 링크한다. 현재 4페이지에 있다면 +1하여 5페이지로 이동하게 된다.
+                //만약 현재 블록이 블록 총개수보다 크거나 같다면 빈 값
+              }
+            }
+            ?>
+          </ul>
+        </div> 
+    </body>
+    </html>

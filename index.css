@@ -1,0 +1,57 @@
+* {
+    margin: 0px;
+}
+body {
+    display: flex; /*레이아웃 배치, 자신이 가진 내용물의 width만큼만 차지*/
+    justify-content: center; /*메인축 방향 정렬*/
+    align-items: center; /*수직축 방향 정렬*/
+    min-height: 100vh;
+}
+.input_login {
+    width: 300px;
+    height: 40px;
+}
+.login {
+    width: 300px;
+    height: 40px;
+}
+.loginbtn {
+    margin-top: 10px;
+}
+.loginBtn {
+    width: 308px;
+    height: 30px;
+}
+.auto_login {
+    width: 300px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    text-align: right;
+}
+.joinBtn {
+    color: gray;
+    width: 68px;
+    border: 0px;
+    background-color: white;
+    margin-top: 2px;
+    margin-right: 2px;
+}
+.searchBtn {
+    color: gray;
+    width: 82px;
+    border: 0px;
+    background-color: white;
+    margin-top: 2px;
+    margin-right: 2px;
+}
+.bottom {
+    float: right;
+}
+a {
+    text-decoration: none;
+    color: gray;
+}
+a:visited {
+    text-decoration: none;
+    color: gray;
+}
