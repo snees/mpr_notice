@@ -1,0 +1,151 @@
+/*header*/
+h1 {
+    width: 90%;
+    margin: auto;
+    margin-top: 3%;
+    padding: 10px;
+}
+hr {
+    margin: auto;
+    width: 90%;
+}
+/*링크 선택*/
+.select_link {
+    margin: 3% 5% 3% 5%;
+}
+.select_link > a {
+    color: black;
+    text-decoration: none;
+    margin-right: 1.5%;
+}
+.select_link > a:hover {
+    color: #b5b2ff;
+}
+.select_link > .cur_page {
+    color: #8041d9;
+}
+/* 회원정보 수정 table*/
+.userinfo table {
+    display: flex;
+    justify-content: center;
+    border-collapse: collapse;
+}
+.userinfo td {
+    width: 1450px;
+    height: 50px;
+    margin: 0% 5% 0% 5%;
+    border-bottom: 1px solid #eaeaea;
+}
+.userinfo th {
+    width: 250px;
+    height: 50px;
+    text-align: left;
+    border-bottom: 1px solid #eaeaea;
+}
+.userinfo input {
+    border: 1px solid gray;
+    border-radius: 4px;
+    height: 30px;
+    width: 200px;
+}
+#useraddress.useraddress {
+    width: 352px;
+}
+.pwd_update {
+    background-color: #a6a6a6;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    height: 30px;
+}
+.pwd_update:hover {
+    background-color: #8c8c8c;
+}
+.div_update_btn,
+.div_save_btn {
+    width: 1700px;
+    margin: auto;
+    padding: 10px;
+    text-align: right;
+}
+.div_addressNum,
+.div_address_search_btn,
+.div_detail_address,
+.div_reference {
+    display: inline-block;
+    padding: 10px 0 10px 0;
+}
+input#detail_address.detail_address,
+input#reference.reference {
+    width: 170px;
+}
+input.address_search_btn {
+    padding: 0px;
+    border: 1px solid #eaeaea;
+    width: 150px;
+    height: 34px;
+}
+.address_search_btn:hover {
+    background-color: #d5d5d5;
+}
+input.update_btn_pwd {
+    width: 300px;
+}
+.update_btn,
+.save_btn,
+.back_btn {
+    background-color: #6799ff;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    width: 50px;
+    height: 32px;
+}
+.update_btn:hover,
+.save_btn:hover,
+.back_btn:hover {
+    background-color: #4374d9;
+}
+.back_btn a {
+    text-decoration: none;
+    color: white;
+}
+.hidden {
+    display: none;
+}
+/* 나의 게시글 table*/
+.table_header {
+    border-top: 2px solid #747474;
+    background-color: #d4f4fa;
+}
+.mypost table {
+    display: flex;
+    justify-content: center;
+}
+.mypost th {
+    width: 550px;
+    height: 40px;
+    border-top: 2px solid gray;
+    border-bottom: 1px solid #eaeaea;
+}
+.mypost td {
+    text-align: center;
+    border-bottom: 1px solid #eaeaea;
+}
+.mypost .title {
+    width: 40%;
+}
+ul {
+    padding: 0px;
+    text-align: center;
+}
+li {
+    list-style: none;
+}
+.mypost a {
+    color: black;
+    text-decoration: none;
+}
+.mypost a:hover {
+    color: #ffc19e;
+}

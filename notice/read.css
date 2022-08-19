@@ -1,0 +1,189 @@
+* {
+    padding: 0px;
+    margin-left: 0px;
+}
+.read_title,
+.write_title_text {
+    width: 1020px;
+    margin: auto;
+}
+
+.write_contents_text {
+    width: 1020px;
+    margin: auto;
+}
+h3 {
+    margin: 0px;
+    margin-bottom: 5px;
+}
+.write_title {
+    width: 1020px;
+    margin: auto;
+    margin-bottom: 20px;
+}
+.new_title {
+    width: 1020px;
+    margin: auto;
+    height: 35px;
+}
+.userinfo {
+    width: 1020px;
+    margin: auto;
+    padding: 10px;
+}
+.read_contents,
+.write_contents {
+    display: flex;
+    justify-content: center;
+    padding: 5px;
+}
+.contents {
+    width: 1010px;
+    height: 500px;
+    padding: 5px;
+    border: 1px solid gray;
+    border-radius: 4px;
+}
+input {
+    border: 1px solid gray;
+    border-radius: 4px;
+}
+.update_btn,
+.cancel_btn,
+.save_btn,
+.delete_btn {
+    width: 40px;
+    height: 25px;
+    margin-left: 2px;
+    background-color: #6799ff;
+    border: 1px solid #6799ff;
+    border-radius: 4px;
+    color: white;
+}
+.update_btn:hover,
+.cancel_btn:hover,
+.save_btn:hover,
+.delete_btn:hover {
+    background-color: #4374d9;
+    border: 1px solid #4374d9;
+}
+button {
+    width: 60px;
+    height: 25px;
+    background-color: #6799ff;
+    border: 1px solid #6799ff;
+    border-radius: 4px;
+    color: white;
+}
+.div_pw {
+    width: 1020px;
+    margin: auto;
+    text-align: right;
+}
+.read_input_pw {
+    margin-bottom: 5px;
+    width: 250px;
+    height: 30px;
+}
+.div_btn {
+    width: 1020px;
+    margin: auto;
+    text-align: right;
+}
+a {
+    text-decoration: none;
+    color: black;
+}
+a:visited {
+    text-decoration: none;
+    color: black;
+}
+button:hover {
+    background-color: #4374d9;
+    border: 1px solid #4374d9;
+}
+hr {
+    width: 75%;
+    margin: auto;
+    margin-bottom: 20px;
+}
+.div_secret_check {
+    width: 1020px;
+    margin: auto;
+    text-align: right;
+    margin-bottom: 1%;
+}
+/* 댓글 */
+.comment_title {
+    width: 1020px;
+    margin: auto;
+    margin-top: 2%;
+}
+.comment_btn {
+    text-align: right;
+}
+.comment_update,
+.comment_delete {
+    font-size: smaller;
+    background-color: white;
+    border-radius: 0px;
+    border: none;
+    color: gray;
+}
+.comment_update:hover,
+.comment_delete:hover,
+.comment_update:visited:hover {
+    color: black;
+}
+.comment_update:visited,
+.comment_delete:visited {
+    color: gray;
+}
+td {
+    width: 500px;
+}
+table {
+    display: flex;
+    justify-content: center;
+}
+b {
+    font-size: small;
+}
+.sql_comment {
+    border-bottom: 1px dotted gray;
+    padding: 5px;
+}
+ul {
+    display: flex;
+    justify-content: center;
+}
+ul > li {
+    list-style: none;
+    text-align: center;
+    width: 4%;
+}
+
+.read_comment {
+    display: flex;
+    justify-content: center;
+}
+.comment {
+    width: 1020px;
+    height: 35px;
+    padding: 5px;
+    border: 1px solid gray;
+    border-radius: 4px;
+}
+.div_comment_btn {
+    width: 1020px;
+    margin: auto;
+    text-align: right;
+    padding: 5px;
+}
+.commnet_write_btn {
+    display: inline-block;
+    margin: auto;
+}
+.hidden {
+    display: none;
+}
