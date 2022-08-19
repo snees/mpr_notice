@@ -14,6 +14,8 @@ body {
 .login {
     width: 300px;
     height: 40px;
+    border: 1px solid gray;
+    border-radius: 3px;
 }
 .loginbtn {
     margin-top: 10px;
@@ -47,11 +49,9 @@ body {
 .bottom {
     float: right;
 }
-a {
-    text-decoration: none;
-    color: gray;
+button:hover {
+    cursor: pointer;
 }
-a:visited {
-    text-decoration: none;
-    color: gray;
+.auto {
+    background-color: #d9e5ff;
 }
