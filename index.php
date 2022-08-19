@@ -1,7 +1,11 @@
 <?php
-include 'session.php';
+include 'head.php';
 
-$conn = mysqli_connect("localhost","hmp","mpr1234!","hmp");
+if(trim($_COOKIE['id'])){
+    $auto_id = $_COOKIE['id'];
+    $ischcecked = 'checked';
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -15,18 +19,21 @@ $conn = mysqli_connect("localhost","hmp","mpr1234!","hmp");
 <body>
 <?php
     if($islogin){
-        echo "<script>location.href='./notice.php'</script>";
+        echo "<script>location.href='notice/notice.php'</script>";
     }else{?>
     <!-- <div class="text"><h1>로그인</h1></div> -->
     <form method="POST" class="form">
-        <div><input type="text" placeholder="id" class="login" name="login_id" autocomplete='off'/></div>
+        <div><input type="text" placeholder="id" class="login" name="login_id" autocomplete='off' value="<?php echo $auto_id?>"/></div>
         <div><input type="password" placeholder="password" class="login" name="login_pw" autocomplete='off'/></div>
         <div class="loginbtn"><input type="submit" class="loginBtn" name="loginBtn" value="login"/></div>
-        <div class="auto_login"><input type="checkbox" name="auto_login" value="auto_login"> 자동로그인</div>
-        <div class="bottom"><button class="joinBtn" name="home_joinBtn"><a href="./join.php">회원가입</a></button>
-        <button class="searchBtn" name="searchBtn"><a href="#none" onclick="window.open('./search.php','new','scrollbars=yes,resizable=no width=500 height=600, left=-1220,top=200');return false">ID/PW 찾기</a></button></div>
+        <div class="auto_login"><input type="checkbox" name="auto_login" value="auto_login" <?php echo $ischcecked?>> 아이디 저장</div>
+        <div class="bottom"><button type="button" class="joinBtn" name="home_joinBtn" onclick="location.href='./user_signup/join.php'">회원가입</button>
+        <button type="button" class="searchBtn" name="searchBtn" onclick="window.open('./user_signup/search.php','new','scrollbars=yes,resizable=no width=500 height=600, left=-1220,top=200');return false">ID/PW 찾기</button></div>
     </form>
     <?php
+        if(trim($_COOKIE['id'])){
+            echo '<script> document.querySelector(".login").classList.add("auto");</script>';
+        }
         if(array_key_exists('loginBtn',$_POST)){
             $user_id=false;
             $sql_id = mysqli_query($conn, "SELECT userid FROM member WHERE userid='{$_POST['login_id']}'");
@@ -34,15 +41,20 @@ $conn = mysqli_connect("localhost","hmp","mpr1234!","hmp");
             if(mysqli_num_rows($sql_id)>0){
                 $_SESSION['userid'] = $_POST['login_id'];
                 while($pw_res = mysqli_fetch_assoc($sql_pw)){
-                    if($pw_res['password']==$_POST['login_pw']){
-                        $_SESSION['userpwd'] = $_POST['login_pw'];
+                    if($pw_res['password']==md5($_POST['login_id'].$_POST['login_pw'])){
                         $check = isset($_POST['auto_login']) ? "checked" : "unchecked";
+                        $_SESSION['userpwd'] = md5($_POST['login_id'].$_POST['login_pw']);
                         if($check == "checked"){
-                            setcookie('id', $_POST['login_id'], time()+86400*30);
-                            setcookie("login_time",time(), time()+86400*30);
-                            setcookie("token",md5($_['login_id'].['login_pw']), time()+86400*30);
+                            if(!trim($_COOKIE['id'])){
+                                setcookie('id', $_POST['login_id'], time()+86400*30);
+                            }else{
+                                if(trim($_COOKIE['id']) != trim($_POST['login_id'])){
+                                    setcookie('id', '', time()-86400*30);
+                                    setcookie('id', $_POST['login_id'], time()+86400*30);
+                                }
+                            }
                         }
-                        echo "<script>location.href='./notice.php'</script>";
+                        echo "<script>location.href='notice/notice.php'</script>";
                         
                     }else{
                         echo '<script>alert("비밀번호가 틀렸습니다.");</script>';
