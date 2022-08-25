@@ -48,7 +48,7 @@
                     }
             ?>
             <tr>
-                <td><a href="./read.php?idx=<?php echo $notice['idx']?>"><?php echo $title;?></a></td>
+                <td><a href="../notice/read.php?idx=<?php echo $notice['idx']?>"><?php echo $title;?></a></td>
                 <td><?php echo $notice['author']?></td>
                 <td>
                     <?php 
