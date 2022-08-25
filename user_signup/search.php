@@ -1,3 +1,9 @@
+<?php
+	include '../head.php';
+
+    $conn = mysqli_connect("localhost","hmp","mpr1234!","hmp");
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,32 +21,36 @@
             <tr><td class="radio"><label for="email"><input type="radio" id="email" name="search" value="email"> 가입한 이메일로 찾기</label></td></tr>
             <tr><td colspan="2"><input type="text" class="input_mail" placeholder="이메일" name="input_mail"/></tr>
             <tr><td class="radio"><label for="phone"><input type="radio" id="phone" name="search" value="phone"/> 가입한 휴대폰으로 찾기</label></td></tr>
-            <tr><td colspan="2"><input type="text" class="input_phone" placeholder="전화번호" name="input_phone/></tr>
+            <tr><td colspan="2"><input type="text" class="input_phone" placeholder="전화번호" name="input_phone"/></tr>
             <tr><td colspan="2"><Button class="searchBtn" name="searchBtn">아이디 찾기</td></tr>
         </table>
-        
     </form>
     <?php
         $radiobtn = $_POST['search'];
         if($radiobtn == "email"){
-            echo '<script>console.log("email");</script>';
-            $conn = mysqli_connect("localhost","hmp","mpr1234!","hmp");
-            $sql = "SELECT mail FROM member WHERE mail='{$_POST['input_mail']}'";
-            $res = mysqli_query($conn, $sql);
-            if(mysqli_num_rows($res)>0){
-                $to = $_POST['input_mail'];
-                echo '<script>console.log("'.$_POST['input_mail'].'");</script>';
-                $subject = "이메일 인증";
-                $contents = "메일 발송 테스트";
-                $result= mail($to, $subject, $contents);
-                if($result){
-                    echo '<script>console.log("mail success");</script>';
-                }else{
-                    echo '<script>console.log("mail fail");</script>';
-                }
-            }
+            $sql = "SELECT * FROM member WHERE mail='{$_POST['input_mail']}'";
+
+            // if(mysqli_num_rows($res)>0){
+            //     $to = $_POST['input_mail'];
+            //     echo '<script>console.log("'.$_POST['input_mail'].'");</script>';
+            //     $subject = "이메일 인증";
+            //     $contents = "메일 발송 테스트";
+            //     $result= mail($to, $subject, $contents);
+            //     if($result){
+            //         echo '<script>console.log("mail success");</script>';
+            //     }else{
+            //         echo '<script>console.log("mail fail");</script>';
+            //     }
+            // }
         }else{
-            echo '<script>console.log("phone");</script>';
+            $sql = "SELECT * FROM member WHERE tel='{$_POST['input_phone']}'";
+        }
+        $res = mysqli_query($conn, $sql);
+        if(mysqli_num_rows($res)>0){
+            $member = mysqli_fetch_array($res);
+            echo '<script>alert("'.$member['userid'].'")</script>';
+        }else{
+            echo '<script>alert("해당 아이디를 찾을수 없습니다.");</script>';
         }
     ?>
 </body>

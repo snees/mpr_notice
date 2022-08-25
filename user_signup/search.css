@@ -48,3 +48,6 @@ a:visited {
     background-color: #d9e5ff;
     color: #6b66ff;
 }
+.hidden {
+    display: none;
+}
