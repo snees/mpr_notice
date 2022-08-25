@@ -26,9 +26,10 @@ if(trim($_COOKIE['id'])){
         <div><input type="text" placeholder="id" class="login" name="login_id" autocomplete='off' value="<?php echo $auto_id?>"/></div>
         <div><input type="password" placeholder="password" class="login" name="login_pw" autocomplete='off'/></div>
         <div class="loginbtn"><input type="submit" class="loginBtn" name="loginBtn" value="login"/></div>
-        <div class="auto_login"><input type="checkbox" name="auto_login" value="auto_login" <?php echo $ischcecked?>> 아이디 저장</div>
+        <div class="auto_login"><label><input type="checkbox" name="auto_login" value="auto_login" <?php echo $ischcecked?>> 아이디 저장</label></div>
         <div class="bottom"><button type="button" class="joinBtn" name="home_joinBtn" onclick="location.href='./user_signup/join.php'">회원가입</button>
         <button type="button" class="searchBtn" name="searchBtn" onclick="window.open('./user_signup/search.php','new','scrollbars=yes,resizable=no width=500 height=600, left=-1220,top=200');return false">ID/PW 찾기</button></div>
+        <button type="button" onclick="tempCookie();">비회원으로 로그인</button>
     </form>
     <?php
         if(trim($_COOKIE['id'])){
@@ -66,5 +67,23 @@ if(trim($_COOKIE['id'])){
         }
     }
     ?>
+    <script>
+        function tempCookie(){
+            <?php
+                $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+                $id_len = rand(5,10);
+                $var_size = strlen($chars);
+                $random_str="";
+                for( $i = 0; $i < $id_len ; $i++ ) {  
+                    $random_str= $random_str.$chars[ rand( 0, $var_size - 1 ) ];
+            ?>
+            // console.log(<?php echo $random_str;?>);
+            <?php
+                }
+                setcookie('non-member', $random_str, time()+86400*30);
+            ?>
+            location.href='notice/notice.php';
+        }
+    </script>
 </body>
 </html>
