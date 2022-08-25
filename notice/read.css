@@ -1,6 +1,6 @@
 * {
     padding: 0px;
-    margin-left: 0px;
+    margin: 0px;
 }
 .read_title,
 .write_title_text {
@@ -30,19 +30,6 @@ h3 {
     width: 1020px;
     margin: auto;
     padding: 10px;
-}
-.read_contents,
-.write_contents {
-    display: flex;
-    justify-content: center;
-    padding: 5px;
-}
-.contents {
-    width: 1010px;
-    height: 500px;
-    padding: 5px;
-    border: 1px solid gray;
-    border-radius: 4px;
 }
 input {
     border: 1px solid gray;
@@ -74,6 +61,10 @@ button {
     border: 1px solid #6799ff;
     border-radius: 4px;
     color: white;
+}
+.file {
+    width: 1020px;
+    margin: auto;
 }
 .div_pw {
     width: 1020px;
@@ -113,11 +104,59 @@ hr {
     text-align: right;
     margin-bottom: 1%;
 }
+.fileUpload {
+    width: 1020px;
+    margin: auto;
+    height: 30px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+.fileUpload input {
+    border: none;
+}
+/* contentEditable */
+.editor,
+.editor_view {
+    width: 970px;
+    height: 500px;
+    margin: auto;
+    padding: 10px 30px;
+    border: 1px solid #d6d6d6;
+    border-radius: 4px;
+    margin-bottom: 1%;
+    overflow: scroll;
+}
+.editor_menu {
+    width: 1020px;
+    margin: auto;
+    margin-bottom: 0.5%;
+}
+#editor img {
+    max-width: 100%;
+}
+.editor_menu button {
+    width: 50px;
+    background-color: #d5d5d5;
+    border: 1px solid #d5d5d5;
+}
+.editor_menu .active {
+    background-color: #747474;
+    border: 1px solid #747474;
+}
 /* 댓글 */
 .comment_title {
     width: 1020px;
     margin: auto;
     margin-top: 2%;
+}
+hr {
+    width: 1030px;
+    margin: auto;
+    margin-bottom: 2%;
+}
+.non_member {
+    width: 1020px;
+    margin: auto;
 }
 .comment_btn {
     text-align: right;
@@ -166,6 +205,7 @@ ul > li {
 .read_comment {
     display: flex;
     justify-content: center;
+    margin-top: 2%;
 }
 .comment {
     width: 1020px;

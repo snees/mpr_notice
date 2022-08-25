@@ -2,8 +2,7 @@
     padding: 0px;
     margin: 0px;
 }
-.table,
-.page_num {
+.table {
     display: flex;
     justify-content: center;
     text-align: center;
@@ -75,6 +74,11 @@ select {
     background-color: #4374d9;
     border: 1px solid #4374d9;
 }
+.home_btn {
+    display: inline;
+    float: left;
+    width: 40px;
+}
 .userinfo {
     display: flex;
     justify-content: right;
@@ -112,18 +116,19 @@ hr {
 .title {
     width: 60%;
 }
+.now_page {
+    color: #4641d9;
+}
 ul {
     display: flex;
     justify-content: center;
-}
-.now_page {
-    color: #4641d9;
 }
 ul > li {
     list-style: none;
     text-align: center;
     width: 4%;
 }
+
 /* 모달 */
 #notice_list.modal_overlay {
     position: absolute;

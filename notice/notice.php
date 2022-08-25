@@ -29,6 +29,7 @@ if ( trim($_GET['mode'])=='logout' ) {
 
 $strSearch = trim($_GET['search']);
 $keyword = trim($_GET['input_search']);
+
 ?>
 <!DOCTYPE html>
 <html lang="ko">
@@ -41,14 +42,15 @@ $keyword = trim($_GET['input_search']);
 	
 	 <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 </head>
+
 <body>
-	<div><a href="../notice/notice.php"><img src="../img/home.png" style="width:40px; height:30px"/></a></div>
+	<div class="home_btn"><a href="../index.php"><img src="../img/home.png" style="width:40px; height:30px"/></a></div>
 	<div id="notice_list" class="modal-overlay">
 		<form method="POST">
     		<div class="userinfo">
 				<div class="mypage_btn"><a href="../mypage/mypage.php">마이페이지</a></div>
 				<div class="logout_btn"><a href="./notice.php?mode=logout">로그아웃</a></div>
-				<!-- <div class="leave_btn"><a href="./notice.php?mode=leave">탈퇴하기</a></div> -->
+				<div class="login_btn hidden"><a href="../index.php">로그인</a></div>
     		</div>
   		</form>
   		<div class="notice"><h1>게시판</h1></div>
@@ -138,10 +140,15 @@ $keyword = trim($_GET['input_search']);
 								if(strlen($title)>30){ 
 									$title=str_replace($notice["title"],mb_substr($notice["title"],0,30,"utf-8")."...",$notice["title"]);
 								}
+								if(trim($_SESSION['userid']) == trim($notice['author'])){
+									$page="./read.php?idx=".$notice['idx'];
+								}else{
+									$page="#";
+								}
 					?>
 								<tr>
 									<td><?php echo $first_num; ?></td>
-									<td><a href="#" class="modal" onclick="modal('<?php echo intval($notice['idx']);?>', '<?php echo intval($notice['secret_post']);?>');"><?php echo $title;?></a></td>
+									<td><a href=<?php echo $page?> class="modal" onclick="modal('<?php echo intval($notice['idx']);?>', '<?php echo intval($notice['secret_post']);?>');"><?php echo $title;?></a></td>
 									<td><?php echo $notice['author']?></td>
 									<td>
 										<?php 
@@ -176,6 +183,7 @@ $keyword = trim($_GET['input_search']);
 		function modal(idx,mode){
 			if(mode == 1){
 				document.querySelector(".modal_container").classList.remove("hidden");
+				document.getElementById("modal_pw").focus();
 				document.getElementById("modal_idx").value=idx;
 			}else{
 				location.href='./read.php?idx='+ idx;
@@ -222,6 +230,16 @@ $keyword = trim($_GET['input_search']);
 			document.querySelector('.modal_container').classList.add("hidden");
 		});
 	</script>
-	
+	<?php
+		if(!trim($_SESSION['userid'])){
+	?>
+			<script>
+				document.querySelector('.logout_btn').classList.add("hidden");
+				document.querySelector('.mypage_btn').classList.add("hidden");
+				document.querySelector(".login_btn").classList.remove("hidden");
+			</script>
+	<?php
+		}
+	?>
 </body>
 </html>
