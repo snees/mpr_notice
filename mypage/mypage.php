@@ -72,7 +72,10 @@
                         <th>이메일</th><td><input type="text" name="mail_update" value="<?php echo $member['mail']?>" placeholder="hongildong@korea.com"/></td>
                     </tr>
                     <tr class="read">
-                        <th>주소</th><td><?php echo $member['address']?> <?php echo $member['addr_detail']?> (<?php echo $member['zip_code']?>)</td>
+                        <th>주소</th><td><?php echo $member['address']?> <?php echo $member['addr_detail']?> (<?php echo $member['zip_code']?>) </td>
+                    </tr>
+                    <tr class="read">
+                        <th>&nbsp;</th><td><div id="map"></div></td>
                     </tr>
                     <tr class="update hidden">
                         <th class="address"><div><h5>주소</h5></div></th>
@@ -91,10 +94,11 @@
                         </td>
                 </table>
                 <div class="div_update_btn"><button class="update_btn" name="update_btn">수정</button></div>
-                <div class="div_save_btn hidden"><input type="password" class="update_btn_pwd" name="update_btn_pwd" placeholder="정보를 수정하려면 비밀번호를 입력하세요."/> <Button class="save_btn" name="save_btn">저장</Button> <Button type="button" class="back_btn" name="back_btn" onclick="location.href='./mypage.php'">취소</Button></div>
+                <div class="div_save_btn hidden"><Button type="button" class="back_btn" name="back_btn" onclick="location.href='./mypage.php'">취소</Button> <Button class="save_btn" name="save_btn">저장</Button></div>
             </form>
         </div>
     <?php
+
         if(array_key_exists('update_btn',$_POST)){
     ?>
                 <script>
@@ -112,43 +116,48 @@
     <?php
         }
         if(array_key_exists('save_btn',$_POST)){
-            if(md5($_SESSION['userid'].$_POST['update_btn_pwd'])==$member['password']){
-                if(!empty($_POST['pwd_update'])){
-                    for($i=0; $i<strlen($_POST['pwd_update']); $i++){
-                        $pwd_arr[$i] = substr($_POST['pwd_update'],$i,1);
-                        if(97<= ord($pwd_arr[$i]) && ord($pwd_arr[$i]) <=122){
-                            $lower_pwd=true;
-                        }
+            //비밀번호를 변경할 경우
+            if(!empty($_POST['pwd_update'])){
+                for($i=0; $i<strlen($_POST['pwd_update']); $i++){
+                    $pwd_arr[$i] = substr($_POST['pwd_update'],$i,1);
+                    if(97<= ord($pwd_arr[$i]) && ord($pwd_arr[$i]) <=122){
+                        $lower_pwd=true;
                     }
-                    for($i=0; $i<strlen($_POST['pwd_update']); $i++){
-                        $pwd_arr[$i] = substr($_POST['pwd_update'],$i,1);
-                        if(65<= ord($pwd_arr[$i]) && ord($pwd_arr[$i]) <=90){
-                            $upper_pwd=true;
-                        }
+                }
+                for($i=0; $i<strlen($_POST['pwd_update']); $i++){
+                    $pwd_arr[$i] = substr($_POST['pwd_update'],$i,1);
+                    if(65<= ord($pwd_arr[$i]) && ord($pwd_arr[$i]) <=90){
+                        $upper_pwd=true;
                     }
-                    if(strlen($_POST['pwd_update'])>=8 && $upper_pwd==true && $lower_pwd==true){
-                        if($_POST['pwd_update'] == $_POST['pwd_update1']){
-                            $password = md5($_POST['id_update'].$_POST['pwd_update']);
-                            if(empty($_POST['reference'])){
-                                $member_update = "UPDATE member SET name='{$_POST['name_update']}', userid='{$_POST['id_update']}', password='$password', tel='{$_POST['tel_update']}', mail='{$_POST['mail_update']}', birth='{$_POST['birth_update']}', zip_code={$_POST['addressNum']}, address='{$_POST['useraddress']}', addr_detail='{$_POST['detail_address']}' WHERE userid='{$_SESSION['userid']}'";
-                            }else{
-                                $member_update = "UPDATE member SET name='{$_POST['name_update']}', userid='{$_POST['id_update']}', password='$password', tel='{$_POST['tel_update']}', mail='{$_POST['mail_update']}', birth='{$_POST['birth_update']}', zip_code={$_POST['addressNum']}, address='{$_POST['useraddress']}', addr_detail='{$_POST['detail_address']}', addr_ref='{$_POST['reference']}' WHERE userid='{$_SESSION['userid']}'";
-                            }
-                            mysqli_query($conn, $member_update);
-                            header("Refresh:0");
+                }
+                if(strlen($_POST['pwd_update'])>=8 && $upper_pwd==true && $lower_pwd==true){
+                    if($_POST['pwd_update'] == $_POST['pwd_update1']){
+                        $password = md5($_POST['id_update'].$_POST['pwd_update']);
+                        if(empty($_POST['reference'])){
+                            $member_update = "UPDATE member SET name='{$_POST['name_update']}', userid='{$_POST['id_update']}', password='$password', tel='{$_POST['tel_update']}', mail='{$_POST['mail_update']}', birth='{$_POST['birth_update']}', zip_code={$_POST['addressNum']}, address='{$_POST['useraddress']}', addr_detail='{$_POST['detail_address']}' WHERE userid='{$_SESSION['userid']}'";
                         }else{
-                            echo '<script> alert("비밀번호가 일치하지 않습니다."); </script>';
+                            $member_update = "UPDATE member SET name='{$_POST['name_update']}', userid='{$_POST['id_update']}', password='$password', tel='{$_POST['tel_update']}', mail='{$_POST['mail_update']}', birth='{$_POST['birth_update']}', zip_code={$_POST['addressNum']}, address='{$_POST['useraddress']}', addr_detail='{$_POST['detail_address']}', addr_ref='{$_POST['reference']}' WHERE userid='{$_SESSION['userid']}'";
                         }
+                        mysqli_query($conn, $member_update);
+                        header("Refresh:0");
                     }else{
-                        if(strlen(($_POST['userPw'])<8) && ($lower_pwd==true && $upper_pwd==true)){
-                            echo '<script> alert("8자 이상 입력"); </script>';
-                        }else if(strlen(($_POST['userPw'])>=8) && ($lower_pwd==false && $upper_pwd==false)){
-                            echo '<script> alert("대소문자 입력 필수"); </script>';
-                        }
+                        echo '<script> alert("비밀번호가 일치하지 않습니다."); </script>';
                     }
                 }else{
-                    echo '<script>alert("비밀번호를 입력하세요");</script>';
+                    if(strlen(($_POST['userPw'])<8) && ($lower_pwd==true && $upper_pwd==true)){
+                        echo '<script> alert("8자 이상 입력"); </script>';
+                    }else if(strlen(($_POST['userPw'])>=8) && ($lower_pwd==false && $upper_pwd==false)){
+                        echo '<script> alert("대소문자 입력 필수"); </script>';
+                    }
                 }
+            }else{
+                if(empty($_POST['reference'])){
+                    $member_update = "UPDATE member SET name='{$_POST['name_update']}', userid='{$_POST['id_update']}', tel='{$_POST['tel_update']}', mail='{$_POST['mail_update']}', birth='{$_POST['birth_update']}', zip_code={$_POST['addressNum']}, address='{$_POST['useraddress']}', addr_detail='{$_POST['detail_address']}' WHERE userid='{$_SESSION['userid']}'";
+                }else{
+                    $member_update = "UPDATE member SET name='{$_POST['name_update']}', userid='{$_POST['id_update']}', tel='{$_POST['tel_update']}', mail='{$_POST['mail_update']}', birth='{$_POST['birth_update']}', zip_code={$_POST['addressNum']}, address='{$_POST['useraddress']}', addr_detail='{$_POST['detail_address']}', addr_ref='{$_POST['reference']}' WHERE userid='{$_SESSION['userid']}'";
+                }
+                mysqli_query($conn, $member_update);
+                header("Refresh:0");
             }
         }
     ?>
@@ -223,6 +232,42 @@
                 }
             }).open();
         }
+    </script>
+
+    <!-- map api -->
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=a646543869ea434781203a39d3559b41&libraries=services,clusterer,drawing"></script>
+    <script>
+        var container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
+        var options = { //지도를 생성할 때 필요한 기본 옵션
+            center: new kakao.maps.LatLng(33.450701, 126.570667), //지도의 중심좌표.
+            level: 3 //지도의 레벨(확대, 축소 정도)
+        };
+
+        var map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
+
+        // 주소-좌표 변환 객체를 생성합니다
+        var geocoder = new kakao.maps.services.Geocoder();
+
+        // 주소로 좌표를 검색합니다
+        geocoder.addressSearch('<?php echo $member['address']?>', function(result, status) {
+
+            // 정상적으로 검색이 완료됐으면 
+            if (status === kakao.maps.services.Status.OK) {
+
+                var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+                // 결과값으로 받은 위치를 마커로 표시합니다
+                var marker = new kakao.maps.Marker({
+                    map: map,
+                    position: coords
+                });
+
+                marker.setMap(map);
+
+                // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+                map.setCenter(coords);
+            } 
+        });    
     </script>
 </body>
 </html>

@@ -1,3 +1,7 @@
+* {
+    padding: 0px;
+    margin: 0px;
+}
 /*header*/
 h1 {
     width: 90%;
@@ -47,6 +51,14 @@ hr {
     border-radius: 4px;
     height: 30px;
     width: 200px;
+}
+.read_addr {
+    display: inline-block;
+}
+#map {
+    display: inline-block;
+    width: 450px;
+    height: 300px;
 }
 #useraddress.useraddress {
     width: 352px;
