@@ -227,3 +227,32 @@ ul > li {
 .hidden {
     display: none;
 }
+
+/* 좋아요 버튼 */
+.unlike_btn {
+    float: right;
+    width: 27px;
+    background-color: white;
+    background-image: url('../img/free-icon-heart-1077035.png');
+    background-repeat: no-repeat;
+    background-size: 27px 23px;
+    border: none;
+}
+.unlike_btn:hover {
+    background-image: url('../img/free-icon-heart-833472.png');
+    background-color: white;
+    border: none;
+}
+.like_btn {
+    float: right;
+    width: 27px;
+    background-color: white;
+    background-image: url('../img/free-icon-heart-833472.png');
+    background-repeat: no-repeat;
+    background-size: 27px 23px;
+    border: none;
+}
+.like_btn:hover {
+    background-color: white;
+    border: none;
+}

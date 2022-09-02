@@ -5,6 +5,7 @@
 	$notice_sql = mysqli_query($conn, $sql);
 	$notice = mysqli_fetch_array($notice_sql);
 
+	$notice_idx = 'notice_'.$_GET['idx'];
 
 	if(trim($_SESSION['userid'])){
 		$cur_id = $_SESSION['userid'];
@@ -23,7 +24,24 @@
 				mysqli_query($conn, $viewSQL);
 			}
 		}
+
+		// 좋아요 확인
+
+		$sql = "SELECT is_like FROM likeTbl where notice_idx = '{$notice_idx}' AND liked_id='{$cur_id}'";
+		$like_sql = mysqli_query($conn, $sql);
+		$like = mysqli_fetch_array($like_sql);
+
+		if($like['is_like'] == 1){
+			$chk_Like = "hidden";
+			$unlike = "";
+		}else{
+			$chk_Like="";
+			$unlike = "hidden";
+		}
+
 	}else{
+		$chk_Like = "hidden";
+		$unlike = "hidden";
 		$non_memberView = false;
 		if(!trim($_COOKIE['notice_'.$notice['idx']."_".$_COOKIE['non-member']])){
 			setcookie("notice_".$notice['idx']."_".$_COOKIE['non-member'], $_COOKIE['non-member'], time()+(60*60*24));
@@ -63,7 +81,8 @@
 			echo '<script>alert("삭제 권한이 없습니다.");</script>';
 		}
 	}
-?><!DOCTYPE html>
+?>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
@@ -78,7 +97,11 @@
 		<div class="read_title"> <h1><?php echo $notice['title']?></h1> </div>
 		<div class="write_title_text hidden"> <h3>제목</h3> </div>
 		<div class="write_title hidden"> <input type="text" class="new_title" name="new_title" value="<?php echo $notice['title']?>"/></div>
-		<div class="userinfo"><?php echo $notice['author']?> <?php echo $notice['createdate']?></div>
+		<div class="userinfo">
+			<?php echo $notice['author']?> <?php echo $notice['createdate']?>
+			<button type="button" class="unlike_btn <?php echo $chk_Like ?>" name="unlike_btn" onclick="like(<?php echo $_GET['idx'] ?>,'<?php echo $_SESSION['userid']?>');"></button>
+			<button type="button" class="like_btn <?php echo $unlike ?>" name="like_btn" onclick="unlike(<?php echo $_GET['idx'] ?>,'<?php echo $_SESSION['userid']?>');"></button>
+		</div>
 		<div class="hidden"><input type="text" name="w_author" value="<?php echo $notice['author']?>"/></div>
 		
 		<div class="editor_view" contentEditable="false">
@@ -112,7 +135,8 @@
 			<!-- <input type="password" class="non_member_pwd hidden" name="non_member_pwd" placeholder="비밀번호를 입력하세요"/> -->
 			<button class="cancel_btn hidden" name="cancel_btn">취소</button> 
 			<button type="button" class="save_btn hidden" name="save_btn" onclick="save_html(<?php echo $_GET['idx']?>);">저장</button> 
-			<input type="submit" value="삭제" class="delete_btn" name="delete_btn"/></div>
+			<input type="submit" value="삭제" class="delete_btn" name="delete_btn"/>
+		</div>
 	</form>
 		<div class="comment_title"><h3>댓글</h3></div>
 		<hr class="comment_title_line">
@@ -176,8 +200,11 @@
 	if(array_key_exists('delete_btn',$_POST)){
 		//회원게시물 삭제
 		if(trim($_SESSION['userid']) == $post_id){
+			$like_delete = "DELETE FROM likeTbl WHERE notice_idx='{$notice_idx}'";
+			mysqli_query($conn, $like_delete);
 			$sql_delete = "DELETE FROM notice WHERE idx='{$_GET['idx']}'";
 			mysqli_query($conn, $sql_delete);
+
 			echo '<script> alert("삭제되었습니다."); </script>';
 			echo "<script>location.href='./notice.php'</script>";
 		}else if(trim($_SESSION['userid']) != $post_id){
@@ -186,6 +213,8 @@
 			//비회원 게시물 삭제
 			if(!empty($_POST['read_input_pw'])){
 				if(trim($notice['nonMember_pwd']) == trim($_POST['read_input_pw'])){
+					$like_delete = "DELETE FROM likeTbl WHERE notice_idx='{$notice_idx}'";
+					mysqli_query($conn, $like_delete);
 					$sql_delete = "DELETE FROM notice WHERE idx='{$_GET['idx']}'";
 					mysqli_query($conn, $sql_delete);
 					echo '<script> alert("삭제되었습니다."); </script>';
@@ -261,16 +290,18 @@
 			$secret_post = 0;
 		}
 	
-		if(array_key_exists('comment_btn',$_POST)){
-			if(!empty($_POST['comment']) && !empty($cur_id) && !empty($cur_pw)){
-				$sql_insert = "INSERT INTO comment (notice_idx, userid, userpw, content, createdate) VALUES ({$notice['idx']},'{$cur_id}','{$cur_pw}','{$_POST['comment']}', now())";
-				mysqli_query($conn, $sql_insert);
-				header("Refresh:0");
-			}else{
+	}
+	if(array_key_exists('comment_btn',$_POST)){
+		if(!empty($_POST['comment']) && !empty($cur_id) && !empty($cur_pw)){
+			$sql_insert = "INSERT INTO comment (notice_idx, userid, userpw, content, createdate) VALUES ({$notice['idx']},'{$cur_id}','{$cur_pw}','{$_POST['comment']}', now())";
+			mysqli_query($conn, $sql_insert);
+			header("Refresh:0");
+		}else{
 
-			}
 		}
 	}
+
+	
 ?>
 <!-- editor_menu -->
 	<script>
@@ -288,6 +319,29 @@
 					location.href='./read.php?idx='+idx;
 				}, "json");
 			});
+		}
+
+		function like(idx, userid){
+			document.querySelector(".like_btn").classList.remove("hidden");
+			document.querySelector(".unlike_btn").classList.add("hidden");
+
+			if(userid){
+				$.post("http://192.168.0.52/hmp/mpr_notice/notice/like_dbSave.php", {"notice_idx":idx, "userid":userid}, function(data){
+					console.log(data.idx, data.userid);
+				}, "json");
+			}
+
+		}
+
+		function unlike(idx, userid){
+			document.querySelector(".like_btn").classList.add("hidden");
+			document.querySelector(".unlike_btn").classList.remove("hidden");
+
+			if(userid){
+				$.post("http://192.168.0.52/hmp/mpr_notice/notice/like_dbDel.php", {"notice_idx":idx, "userid":userid}, function(data){
+					console.log(data.idx, data.userid);
+				}, "json");
+			}
 		}
 	</script>
 </html>
