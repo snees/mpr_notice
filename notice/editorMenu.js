@@ -42,25 +42,25 @@ function focusEditor() {
     editor.focus({ preventScroll: true });
 }
 
-btnImage.addEventListener('click', function () {
-    imageSelector.click();
-});
+// btnImage.addEventListener('click', function () {
+//     imageSelector.click();
+// });
 
-imageSelector.addEventListener('change', function (e) {
-    const files = e.target.files;
-    if (!!files) {
-        insertImageDate(files[0]);
-    }
-});
+// imageSelector.addEventListener('change', function (e) {
+//     const files = e.target.files;
+//     if (!!files) {
+//         insertImageDate(files[0]);
+//     }
+// });
 
-function insertImageDate(file) {
-    const reader = new FileReader();
-    reader.addEventListener('load', function (e) {
-        focusEditor();
-        document.execCommand('insertImage', false, `${reader.result}`);
-    });
-    reader.readAsDataURL(file);
-}
+// function insertImageDate(file) {
+//     const reader = new FileReader();
+//     reader.addEventListener('load', function (e) {
+//         focusEditor();
+//         document.execCommand('insertImage', false, `${reader.result}`);
+//     });
+//     reader.readAsDataURL(file);
+// }
 
 
 editor.addEventListener('keydown', function () {
