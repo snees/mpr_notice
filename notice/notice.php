@@ -68,16 +68,14 @@ $keyword = trim($_GET['input_search']);
     	</form>
 		<div class="table">
 			<table>
-				<thead>
-				<tr>
+				<tr class="table_header">
 					<th>번호</th>
 						<th class="title">제목</th>
 						<th>작성자</th>
 						<th>작성일</th>
 						<th>조회수</th>
 						<th>좋아요</th>
-					</tr>
-				</thead>
+				</tr>
 				<tbody>
 					<?php
 						$arryWhere = array();
