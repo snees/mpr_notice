@@ -126,6 +126,10 @@ input.update_btn_pwd {
     display: none;
 }
 /* 나의 게시글 table*/
+table {
+    width: 90%;
+    margin: auto;
+}
 .table_header {
     border-top: 2px solid #747474;
     background-color: #d4f4fa;

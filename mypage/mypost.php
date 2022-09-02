@@ -15,6 +15,7 @@
                 <th>작성자</th>
                 <th>작성일</th>
                 <th>조회수</th>
+                <th>좋아요</th>
             </tr> 
             <?php
             if(isset($_GET['page'])){
@@ -62,6 +63,15 @@
                 <td>
                     <?php
                         echo $notice['view']; 
+                    ?>
+                </td>
+                <td>
+					<?php
+                        $notice_idx = 'notice_'.$notice['idx'];
+                        $like_cntSQL = "SELECT count(*) AS cnt FROM likeTbl WHERE notice_idx = '{$notice_idx}'";
+                        $like_res = mysqli_query($conn, $like_cntSQL);
+                        $like = mysqli_fetch_array($like_res);
+                        echo $like['cnt'];
                     ?>
                 </td>
             </tr>
