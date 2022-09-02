@@ -16,12 +16,12 @@
     <form method="POST" enctype="multipart/form-data">
         <table>
             <tr><th class="text">제목</th></tr>
-            <tr><td><input type="text" class="write_title" name="write_title" placeholder="제목을 입력해주세요"></td></tr>
+            <tr><td><input type="text" class="write_title" name="write_title" placeholder="제목을 입력해주세요" autocomplete='off'></td></tr>
 			<input type="hidden" class="title"/>
             
 			<tr><th class="text">작성자</th></tr>
             <tr class="member"><td><input type="text" class="mem_write_author" name="member_author" value="<?php echo trim($_SESSION['userid']);?>" readonly></td></tr>
-            <tr class="non_member hidden"><td><input type="text" class="write_author" name="non_member_author" placeholder="작성자를 입력해주세요"></td></tr>
+            <tr class="non_member hidden"><td><input type="text" class="write_author" name="non_member_author" placeholder="작성자를 입력해주세요" autocomplete='off'></td></tr>
 			<input type="hidden" class="author"/>
             
 			<tr><th class="text">내용</th></tr>
