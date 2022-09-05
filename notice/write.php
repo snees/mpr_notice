@@ -59,13 +59,12 @@
         $ismember = 0;
     }
 
-    $check = isset($_POST['secret_check']) ? "checked" : "unchecked";
-    if($check == "checked"){
-        $secret_post = 1;
-    }else{
-        $secret_post = 0;
-    }
-
+    // $check = isset($_POST['secret_check']) ? "checked" : "unchecked";
+    // if($check == "checked"){
+    //     $secret_post = 1;
+    // }else{
+    //     $secret_post = 0;
+    // }
 
     // if(array_key_exists('saveBtn',$_POST)){
 
@@ -112,7 +111,12 @@
 	<script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
 	<script>
 		function save_html(){
-            console.log("save_html");
+            const isChecked = document.querySelector(".secret_check").checked;
+            if(isChecked == true){
+                var secret = 1;
+            }else{
+                var secret = 0;
+            }
             $(document).ready(function(){
                 var title = $(".write_title").val();
 				var jbHtml = $(".editor").html();
@@ -122,16 +126,16 @@
 					var author = $(".write_author").val();
 
 					if(pwd){
-						$.post("http://192.168.0.52/hmp/mpr_notice/notice/write_dbSave.php", {"title":title,"author":author,"content":jbHtml,"secret_post":<?php echo $secret_post ?>, "member": <?php echo $ismember?>,"nonMember": pwd}, function(data){
-							alert("글쓰기 완료");
+						$.post("http://192.168.0.52/hmp/mpr_notice/notice/write_dbSave.php", {"title":title,"author":author,"content":jbHtml,"secret_post":secret, "member": <?php echo $ismember?>,"nonMember": pwd}, function(data){
+							alert("작성 완료되었습니다.");
 							location.href='./notice.php';
 						}, "json");
 					}
 				}else{
 					var author = $(".mem_write_author").val();
 
-					$.post("http://192.168.0.52/hmp/mpr_notice/notice/write_dbSave.php", {"title":title,"author":author,"content":jbHtml,"secret_post":<?php echo $secret_post ?>, "member": <?php echo $ismember?>}, function(data){
-						alert("글쓰기 완료");
+					$.post("http://192.168.0.52/hmp/mpr_notice/notice/write_dbSave.php", {"title":title,"author":author,"content":jbHtml,"secret_post":secret, "member": <?php echo $ismember?>}, function(data){
+						alert("작성 완료되었습니다.");
 						location.href='./notice.php';
 						}, "json");
 					}
