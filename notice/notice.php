@@ -106,7 +106,7 @@ $keyword = trim($_GET['input_search']);
 							<tr>
 								<td>&nbsp;</td>
 								<td>검색결과가 없습니다.</td>
-								<td colspan="3">&nbsp;</td>
+								<td colspan="4">&nbsp;</td>
 							</tr>
 					<?php
 						// echo "<script>location.href='./notice.php'</script>";
