@@ -112,7 +112,7 @@
                                         
                                         //주소-참고항목이 있을 경우
                                         if(empty($_POST['reference'])){
-                                            $sql_insert = "INSERT INTO member (name, userid, password, mail, tel, birth, createDate, zip_code, address, addr_detail) 
+                                            $sql_insert = "INSERT INTO member (name, userid, password, mail, tel, birth, createDate, zip_code, address, addr_detail, addr_detail) 
                                                         VALUES ('{$_POST['userName']}','{$_POST['userId']}','$password','{$_POST['userMail']}','{$_POST['userTel']}','{$_POST['userBirth']}',now(), {$_POST['addressNum']}, '{$_POST['useraddress']}','{$_POST['detail_address']}')";
                                             mysqli_query($conn, $sql_insert);
                                             echo '<script> alert("가입되었습니다.");</script>';
@@ -120,7 +120,7 @@
                                         }
                                         //주소-참고항목이 없을 경우
                                         else{
-                                            $sql_insert = "INSERT INTO member (name, userid, password, mail, tel, birth, createDate, zip_code, address, addr_ref) 
+                                            $sql_insert = "INSERT INTO member (name, userid, password, mail, tel, birth, createDate, zip_code, address, addr_detail, addr_ref) 
                                                         VALUES ('{$_POST['userName']}','{$_POST['userId']}','$password','{$_POST['userMail']}','{$_POST['userTel']}','{$_POST['userBirth']}',now(), {$_POST['addressNum']}, '{$_POST['useraddress']}','{$_POST['detail_address']}' , '{$_POST['reference']}')";
                                             mysqli_query($conn, $sql_insert);
                                             echo '<script> alert("가입되었습니다.");</script>';
