@@ -5,7 +5,7 @@ if(trim($_COOKIE['id'])){
     $auto_id = $_COOKIE['id'];
     $ischcecked = 'checked';
 }
-
+//test
 ?>
 <!DOCTYPE html>
 <html lang="en">
